@@ -21,6 +21,8 @@ export class ProductListComponent implements OnInit {
   products$: Observable<Product[]>;
   productsNumber$: Observable<number>;
   mostExpensiveProduct$: Observable<Product>;
+  productsTotalNumber$: Observable<number>;
+  isLastPage$: Observable<boolean>;
 
   errorMessage;
 
@@ -81,6 +83,17 @@ export class ProductListComponent implements OnInit {
                                 map(products => products.length),
                                 startWith(0)
                               )
+
+    this.productsTotalNumber$ = this
+                                  .productService
+                                  .productsTotalNumber$;
+
+    this.isLastPage$ = combineLatest([this.productsNumber$, this.productsTotalNumber$])
+      .pipe(
+        map(([productsNumber, productsTotalNumber]) =>
+          productsNumber >= productsTotalNumber
+        )
+      );
 
     this.mostExpensiveProduct$ = this
                                     .productService
