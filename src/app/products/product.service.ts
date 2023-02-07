@@ -16,7 +16,12 @@ export class ProductService {
   mostExpensiveProduct$: Observable<Product>;
   productsTotalNumber$: Observable<number>;
 
-  productsToLoad: number = 50;
+  productsToLoad: number = 10;
+
+  resetList() {
+    this.productsSubject.next([]);
+    this.initProducts();
+  }
 
   constructor(private http: HttpClient) {
     this.initProducts();

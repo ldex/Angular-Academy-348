@@ -75,7 +75,10 @@ export class ProductListComponent implements OnInit {
 
     this.products$ = this
                       .productService
-                      .products$;
+                      .products$
+                      .pipe(
+                        filter(products => products.length > 0)
+                      );
 
     this.productsNumber$ = this
                               .products$
@@ -101,7 +104,12 @@ export class ProductListComponent implements OnInit {
   }
 
   refresh() {
-    this.productService.initProducts();
-    this.router.navigateByUrl('/products'); // Self route navigation
+    // Reset of the list on the service
+    this.productService.resetList();
+
+    // Reset of the pagination
+    this.start = 0;
+    this.end = this.pageSize;
+    this.currentPage = 1;
   }
 }
